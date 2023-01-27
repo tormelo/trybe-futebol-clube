@@ -15,7 +15,7 @@ describe('Para endpoint POST /login', () => {
     sinon.restore();
   });
 
-  it('deve retornar status 201 em caso de sucesso', async () => {
+  it('deve retornar status 200 em caso de sucesso', async () => {
     sinon
       .stub(User, "findOne")
       .resolves({
@@ -100,5 +100,39 @@ describe('Para endpoint POST /login', () => {
     
     expect(httpResponse.status).to.equal(400);
     expect(httpResponse.body).to.deep.equal({message: 'All fields must be filled'});
+  });
+});
+
+describe('Para endpoint get /login/validate', () => {
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('deve retornar status 200 em caso de sucesso', async () => {
+    sinon
+      .stub(User, "findOne")
+      .resolves({
+        id: 2,
+        username: 'User',
+        role: 'user',
+        email: 'user@user.com',
+        password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO'
+      } as User);
+    
+    const loginResponse = await chai
+      .request(app)
+      .post('/login')
+      .send({
+        email: 'user@user.com',
+        password: 'secret_user'
+      })
+    
+    const validateResponse = await chai
+      .request(app)
+      .get('/login/validate')
+      .set('authorization', loginResponse.body.token)
+    
+    expect(validateResponse.status).to.equal(200);
+    expect(validateResponse.body).to.deep.equal({role: 'user'});
   });
 });
