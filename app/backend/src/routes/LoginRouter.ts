@@ -14,4 +14,9 @@ LoginRouter.post(
   (req, res, next) => loginController.login(req, res, next),
 );
 
+LoginRouter.get(
+  '/validate',
+  (req, res, next) => loginController.validate(req, res, next),
+);
+
 export default LoginRouter;
