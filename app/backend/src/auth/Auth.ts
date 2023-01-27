@@ -16,6 +16,11 @@ class Auth {
     const token = jwt.sign(payload, this.secret, this.config);
     return token;
   }
+
+  public verifyToken(token: string) {
+    const payload = jwt.verify(token, this.secret);
+    return payload;
+  }
 }
 
 export default Auth;
