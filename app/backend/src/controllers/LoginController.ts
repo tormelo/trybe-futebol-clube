@@ -12,6 +12,15 @@ class LoginController {
       next(error);
     }
   }
+
+  async validate(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    try {
+      const response = await this._service.validate(req.headers.authorization as string);
+      res.status(200).send({ role: response });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default LoginController;
