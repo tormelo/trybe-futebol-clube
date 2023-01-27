@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcryptjs';
+import IUser from '../interfaces/IUser';
 import ITokenPayload from '../interfaces/ITokenPayload';
 import Auth from '../auth/Auth';
 import User from '../database/models/User';
@@ -27,6 +28,16 @@ class LoginService {
     const token = this.auth.createToken(payload);
 
     return token;
+  }
+
+  async validate(token: string): Promise<string> {
+    const { email } = this.auth.verifyToken(token) as ITokenPayload;
+
+    const user = await User.findOne({ where: { email } }) as IUser;
+
+    console.log(user);
+
+    return user.role;
   }
 }
 
