@@ -34,7 +34,7 @@ describe('Para endpoint POST /login', () => {
         password: 'secret_user'
       })
     
-    expect(httpResponse.status).to.equal(201);
+    expect(httpResponse.status).to.equal(200);
     expect(httpResponse.body).to.have.key('token');
   });
 
