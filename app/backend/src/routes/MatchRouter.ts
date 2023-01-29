@@ -5,7 +5,7 @@ const MatchRouter = Router();
 
 MatchRouter.get(
   '/',
-  (req, res, next) => MatchController.getAll(req, res, next),
+  (req, res, next) => MatchController.getMatches(req, res, next),
 );
 
 export default MatchRouter;
