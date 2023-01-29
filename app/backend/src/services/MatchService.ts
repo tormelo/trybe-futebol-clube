@@ -3,11 +3,29 @@ import Match from '../database/models/Match';
 import IMatch from '../interfaces/IMatch';
 
 class MatchService {
-  static async getAll(): Promise<IMatch[]> {
+  private static async getAll(): Promise<IMatch[]> {
     const matches = await Match.findAll({
       include: [{ model: Team, as: 'homeTeam', attributes: { exclude: ['id'] } },
         { model: Team, as: 'awayTeam', attributes: { exclude: ['id'] } }],
     });
+    return matches as unknown as IMatch[];
+  }
+
+  private static async getFiltered(inProgress: boolean): Promise<IMatch[]> {
+    const matches = await Match.findAll({
+      include: [{ model: Team, as: 'homeTeam', attributes: { exclude: ['id'] } },
+        { model: Team, as: 'awayTeam', attributes: { exclude: ['id'] } }],
+      where: { inProgress },
+    });
+    return matches as unknown as IMatch[];
+  }
+
+  public static async getMatches(filter: string | undefined): Promise<IMatch[]> {
+    let matches: IMatch[] = [];
+
+    if (filter) matches = await MatchService.getFiltered(filter === 'true');
+    else matches = await MatchService.getAll();
+
     return matches as unknown as IMatch[];
   }
 }
