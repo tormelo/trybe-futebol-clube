@@ -16,7 +16,7 @@ describe('Para endpoint GET /teams', () => {
     sinon.restore();
   });
 
-  it('deve retornar status 200 em caso de sucesso', async () => {
+  it('deve retornar status 200 e dados dos times em caso de sucesso', async () => {
     sinon
       .stub(Team, "findAll")
       .resolves(allTeamsMock as Team[]);
@@ -27,5 +27,24 @@ describe('Para endpoint GET /teams', () => {
     
     expect(httpResponse.status).to.equal(200);
     expect(httpResponse.body).to.deep.equal(allTeamsMock);
+  });
+});
+
+describe('Para endpoint GET /teams:id', () => {
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('deve retornar status 200 e dados do time buscado em caso de sucesso', async () => {
+    sinon
+      .stub(Team, "findOne")
+      .resolves(allTeamsMock[0] as Team);
+    
+    const httpResponse = await chai
+      .request(app)
+      .get('/teams/1')
+    
+    expect(httpResponse.status).to.equal(200);
+    expect(httpResponse.body).to.deep.equal(allTeamsMock[0]);
   });
 });
