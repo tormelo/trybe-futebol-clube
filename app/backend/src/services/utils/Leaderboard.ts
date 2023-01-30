@@ -87,6 +87,13 @@ class Leaderboard {
         .getLeaderboardTeam(teamName, homeMatches as ILeaderboardMatch[]));
     return this.sortLeaderboard(leaderboard);
   }
+
+  public static getAwayLeaderboard(teams: ILeaderboardModel[]): ILeaderboardTeam[] {
+    const leaderboard = teams
+      .map(({ teamName, awayMatches }) => this
+        .getLeaderboardTeam(teamName, awayMatches as ILeaderboardMatch[]));
+    return this.sortLeaderboard(leaderboard);
+  }
 }
 
 export default Leaderboard;
