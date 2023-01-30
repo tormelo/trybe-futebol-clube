@@ -1,3 +1,26 @@
+export const validMatchBody = {
+  homeTeamId: 16,
+  awayTeamId: 8,
+  homeTeamGoals: 2,
+  awayTeamGoals: 2
+}
+
+export const duplicateMatchBody = {
+  homeTeamId: 8,
+  awayTeamId: 8,
+  homeTeamGoals: 2,
+  awayTeamGoals: 2
+}
+
+export const matchBodySuccess = {
+  id: 10,
+  homeTeamId: 16,
+  awayTeamId: 8,
+  homeTeamGoals: 2,
+  awayTeamGoals: 2,
+  inProgress: true,
+}
+
 export const unfilteredMatches = [
   {
     "id": 1,
