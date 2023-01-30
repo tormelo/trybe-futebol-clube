@@ -1,6 +1,8 @@
+import IMatchBody from '../interfaces/IMatchBody';
 import Team from '../database/models/Team';
 import Match from '../database/models/Match';
 import IMatch from '../interfaces/IMatch';
+import MatchValidator from './validations/MatchValidator';
 
 class MatchService {
   private static async getAll(): Promise<IMatch[]> {
@@ -27,6 +29,17 @@ class MatchService {
     else matches = await MatchService.getAll();
 
     return matches as unknown as IMatch[];
+  }
+
+  public static async registerMatch(matchBody: IMatchBody): Promise<IMatchBody> {
+    await MatchValidator.validate(matchBody);
+
+    const newMatchBody = { ...matchBody };
+    newMatchBody.inProgress = true;
+
+    const newMatch = await Match.create({ ...newMatchBody });
+
+    return newMatch as unknown as IMatchBody;
   }
 }
 
