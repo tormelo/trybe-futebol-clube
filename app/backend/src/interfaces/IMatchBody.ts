@@ -1,7 +1,7 @@
-interface IMatchBody {
+import IMatchScores from './IMatchScores';
+
+interface IMatchBody extends IMatchScores{
   id?: number,
-  homeTeamGoals: number,
-  awayTeamGoals: number,
   inProgress?: boolean,
   homeTeamId: number,
   awayTeamId: number,
