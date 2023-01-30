@@ -1,3 +1,4 @@
+import IMatchScores from '../interfaces/IMatchScores';
 import IMatchBody from '../interfaces/IMatchBody';
 import Team from '../database/models/Team';
 import Match from '../database/models/Match';
@@ -44,6 +45,10 @@ class MatchService {
 
   public static async finishMatch(matchId: number): Promise<void> {
     await Match.update({ inProgress: false }, { where: { id: matchId } });
+  }
+
+  public static async updateMatch(matchId: number, updateData: IMatchScores): Promise<void> {
+    await Match.update(updateData, { where: { id: matchId } });
   }
 }
 
