@@ -15,4 +15,10 @@ MatchRouter.post(
   (req, res, next) => MatchController.registerMatch(req, res, next),
 );
 
+MatchRouter.patch(
+  '/:id/finish',
+  validateToken,
+  (req, res, next) => MatchController.finishMatch(req, res, next),
+);
+
 export default MatchRouter;
