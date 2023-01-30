@@ -6,7 +6,7 @@ import chaiHttp = require('chai-http');
 import { app } from '../app';
 import { allTeamsMock } from './mocks/team.mock';
 import Match from '../database/models/Match';
-import { validMatchBody, matchBodySuccess, unfilteredMatches, duplicateMatchBody } from './mocks/match.mock';
+import { validMatchBody, matchBodySuccess, unfilteredMatches, duplicateMatchBody, scoreBody } from './mocks/match.mock';
 import IMatch from '../interfaces/IMatch';
 import Auth from '../auth/Auth';
 import ITokenPayload from '../interfaces/ITokenPayload';
@@ -169,5 +169,30 @@ describe('Para endpoint PATCH /matches/:id/finish', () => {
     
     expect(httpResponse.status).to.equal(200);
     expect(httpResponse.body).to.deep.equal({message: 'Finished'});
+  });
+});
+
+describe('Para endpoint PATCH /matches/:id', () => {
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  const auth = new Auth();
+  const tokenPayload: ITokenPayload = {id: 1, email: "user@user.com"};
+  const token = auth.createToken(tokenPayload);
+
+  it('deve retornar status 200 em caso de sucesso', async () => {
+    sinon
+      .stub(Match, "update")
+      .resolves([1]);
+    
+    const httpResponse = await chai
+      .request(app)
+      .patch('/matches/1')
+      .set('authorization', token)
+      .send(scoreBody)
+    
+    expect(httpResponse.status).to.equal(200);
+    expect(httpResponse.body).to.deep.equal({message: 'Updated'});
   });
 });

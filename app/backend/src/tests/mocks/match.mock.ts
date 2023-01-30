@@ -1,3 +1,8 @@
+export const scoreBody = {
+  homeTeamGoals: 3,
+  awayTeamGoals: 2
+}
+
 export const validMatchBody = {
   homeTeamId: 16,
   awayTeamId: 8,
