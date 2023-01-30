@@ -15,7 +15,9 @@ class LeaderboardService {
         where: { inProgress: false } }],
     });
 
-    const teamMatches = teams.map((team) => team.get({ plain: true })) as ILeaderboardModel[];
+    const teamsJSON = JSON.stringify(teams);
+    const teamMatches = JSON.parse(teamsJSON) as ILeaderboardModel[];
+
     const leaderboard = Leaderboard.getHomeLeaderboard(teamMatches);
 
     return leaderboard;
