@@ -22,6 +22,11 @@ class Leaderboard {
 
     return results;
   }
+
+  private static getPoints(results: ILeaderboardResults): number {
+    const { totalVictories, totalDraws } = results;
+    return (totalVictories * 3) + totalDraws;
+  }
 }
 
 export default Leaderboard;
