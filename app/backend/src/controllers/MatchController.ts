@@ -15,6 +15,19 @@ class MatchController {
       next(error);
     }
   }
+
+  static async registerMatch(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> {
+    try {
+      const response = await MatchService.registerMatch(req.body);
+      res.status(201).send(response);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default MatchController;
