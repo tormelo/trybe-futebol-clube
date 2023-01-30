@@ -27,6 +27,19 @@ class LeaderboardController {
       next(error);
     }
   }
+
+  static async getLeaderboard(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> {
+    try {
+      const response = await LeaderboardService.getLeaderboard();
+      res.status(200).send(response);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default LeaderboardController;
