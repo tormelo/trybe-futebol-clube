@@ -68,11 +68,24 @@ class Leaderboard {
     };
   }
 
+  private static sortLeaderboard(leaderboard: ILeaderboardTeam[]): ILeaderboardTeam[] {
+    const sortedLeaderboard = leaderboard
+      .sort((a, b) => {
+        let diff = b.totalPoints - a.totalPoints;
+        if (diff === 0) diff = b.goalsBalance - a.goalsBalance;
+        if (diff === 0) diff = b.goalsFavor - a.goalsFavor;
+        if (diff === 0) diff = a.goalsOwn - b.goalsOwn;
+        return diff;
+      });
+
+    return sortedLeaderboard;
+  }
+
   public static getHomeLeaderboard(teams: ILeaderboardModel[]): ILeaderboardTeam[] {
     const leaderboard = teams
       .map(({ teamName, homeMatches }) => this
         .getLeaderboardTeam(teamName, homeMatches as ILeaderboardMatch[]));
-    return leaderboard;
+    return this.sortLeaderboard(leaderboard);
   }
 }
 
