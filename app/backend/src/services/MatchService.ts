@@ -41,6 +41,10 @@ class MatchService {
 
     return newMatch as unknown as IMatchBody;
   }
+
+  public static async finishMatch(matchId: number): Promise<void> {
+    await Match.update({ inProgress: false }, { where: { id: matchId } });
+  }
 }
 
 export default MatchService;
