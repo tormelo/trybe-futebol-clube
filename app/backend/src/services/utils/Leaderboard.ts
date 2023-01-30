@@ -1,3 +1,4 @@
+import ILeaderboardModel from '../../interfaces/ILeaderboardModel';
 import ILeaderboardGoals from '../../interfaces/ILeaderboardGoals';
 import ILeaderboardMatch from '../../interfaces/ILeaderboardMatch';
 import ILeaderboardResults from '../../interfaces/ILeaderboardResults';
@@ -50,7 +51,7 @@ class Leaderboard {
     return goals;
   }
 
-  public static getLeaderboardTeam(name: string, matches: ILeaderboardMatch[]): ILeaderboardTeam {
+  private static getLeaderboardTeam(name: string, matches: ILeaderboardMatch[]): ILeaderboardTeam {
     const totalGames = this.getTotalGames(matches);
     const results = this.getResults(matches);
     const totalPoints = this.getPoints(results);
@@ -65,6 +66,13 @@ class Leaderboard {
       ...goals,
       efficiency,
     };
+  }
+
+  public static getHomeLeaderboard(teams: ILeaderboardModel[]): ILeaderboardTeam[] {
+    const leaderboard = teams
+      .map(({ teamName, homeMatches }) => this
+        .getLeaderboardTeam(teamName, homeMatches as ILeaderboardMatch[]));
+    return leaderboard;
   }
 }
 
