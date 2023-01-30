@@ -1,6 +1,7 @@
 import ILeaderboardGoals from '../../interfaces/ILeaderboardGoals';
 import ILeaderboardMatch from '../../interfaces/ILeaderboardMatch';
 import ILeaderboardResults from '../../interfaces/ILeaderboardResults';
+import ILeaderboardTeam from '../../interfaces/ILeaderboardTeam';
 
 class Leaderboard {
   private static getTotalGames(matches: ILeaderboardMatch[]): number {
@@ -47,6 +48,23 @@ class Leaderboard {
     goals.goalsBalance = goals.goalsFavor - goals.goalsOwn;
 
     return goals;
+  }
+
+  public static getLeaderboardTeam(name: string, matches: ILeaderboardMatch[]): ILeaderboardTeam {
+    const totalGames = this.getTotalGames(matches);
+    const results = this.getResults(matches);
+    const totalPoints = this.getPoints(results);
+    const goals = this.getGoals(matches);
+    const efficiency = this.getEfficiency(totalPoints, totalGames);
+
+    return {
+      name,
+      totalPoints,
+      totalGames,
+      ...results,
+      ...goals,
+      efficiency,
+    };
   }
 }
 
