@@ -28,6 +28,20 @@ class MatchController {
       next(error);
     }
   }
+
+  static async finishMatch(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> {
+    try {
+      const { id } = req.params;
+      await MatchService.finishMatch(Number(id));
+      res.status(200).send({ message: 'Finished' });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default MatchController;
