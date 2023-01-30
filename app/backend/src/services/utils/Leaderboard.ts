@@ -1,3 +1,4 @@
+import ILeaderboardGoals from '../../interfaces/ILeaderboardGoals';
 import ILeaderboardMatch from '../../interfaces/ILeaderboardMatch';
 import ILeaderboardResults from '../../interfaces/ILeaderboardResults';
 
@@ -29,6 +30,23 @@ class Leaderboard {
 
   private static getEfficiency(totalPoints: number, totalGames: number): string {
     return ((totalPoints / (totalGames * 3)) * 100).toFixed(2);
+  }
+
+  private static getGoals(matches: ILeaderboardMatch[]): ILeaderboardGoals {
+    const goals = {
+      goalsFavor: 0,
+      goalsOwn: 0,
+      goalsBalance: 0,
+    };
+
+    matches.forEach(({ goalsFavor, goalsOwn }) => {
+      goals.goalsFavor += goalsFavor;
+      goals.goalsOwn += goalsOwn;
+    });
+
+    goals.goalsBalance = goals.goalsFavor - goals.goalsOwn;
+
+    return goals;
   }
 }
 
