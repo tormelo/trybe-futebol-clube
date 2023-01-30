@@ -65,6 +65,33 @@ describe('Para endpoint GET /matches', () => {
   });
 });
 
+describe('Para validação de token', () => {
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('deve retornar status 401 se não for informada token', async () => {
+    const httpResponse = await chai
+      .request(app)
+      .post('/matches')
+      .send(validMatchBody)
+    
+    expect(httpResponse.status).to.equal(401);
+    expect(httpResponse.body).to.deep.equal({message:'Token must be a valid token'});
+  });
+
+  it('deve retornar status 401 se informado token inválido', async () => {
+    const httpResponse = await chai
+      .request(app)
+      .post('/matches')
+      .set('authorization', 'invalid-token')
+      .send(validMatchBody)
+    
+    expect(httpResponse.status).to.equal(401);
+    expect(httpResponse.body).to.deep.equal({message:'Token must be a valid token'});
+  });
+});
+
 describe('Para endpoint POST /matches', () => {
   afterEach(() => {
     sinon.restore();
@@ -119,25 +146,28 @@ describe('Para endpoint POST /matches', () => {
     expect(httpResponse.status).to.equal(404);
     expect(httpResponse.body).to.deep.equal({message:'There is no team with such id!'});
   });
+});
 
-  it('deve retornar status 401 se não for informada token', async () => {
-    const httpResponse = await chai
-      .request(app)
-      .post('/matches')
-      .send(validMatchBody)
-    
-    expect(httpResponse.status).to.equal(401);
-    expect(httpResponse.body).to.deep.equal({message:'Token must be a valid token'});
+describe('Para endpoint PATCH /matches/:id/finish', () => {
+  afterEach(() => {
+    sinon.restore();
   });
 
-  it('deve retornar status 401 se informado token inválido', async () => {
+  const auth = new Auth();
+  const tokenPayload: ITokenPayload = {id: 1, email: "user@user.com"};
+  const token = auth.createToken(tokenPayload);
+
+  it('deve retornar status 200 em caso de sucesso', async () => {
+    sinon
+      .stub(Match, "update")
+      .resolves([1]);
+    
     const httpResponse = await chai
       .request(app)
-      .post('/matches')
-      .set('authorization', 'invalid-token')
-      .send(validMatchBody)
+      .patch('/matches/1/finish')
+      .set('authorization', token)
     
-    expect(httpResponse.status).to.equal(401);
-    expect(httpResponse.body).to.deep.equal({message:'Token must be a valid token'});
+    expect(httpResponse.status).to.equal(200);
+    expect(httpResponse.body).to.deep.equal({message: 'Finished'});
   });
 });
